@@ -46,9 +46,12 @@ begin
         if carry = '1' then --carry is 1 when mantissa dividend is less than mantissa divisor
             
             -- Num_shift <= 12 - Expo_A + Expo_B + 2;
-            Num_shift <= 8 - Expo_A + Expo_B + 1; --shift right index
+            --shift right index
+            --Num_shift <= 8 - Expo_A + Expo_B + 1;  --12 int 4 fraction
+            --Num_shift <= 4 - Expo_A + Expo_B + 1;  --8 int 8 fractional
+            Num_shift <= Expo_B - Expo_A + 1;
         else
-            Num_shift <= 8 - Expo_A + Expo_B;
+            Num_shift <= Expo_B- Expo_A ;
         end if;
     
     end process;

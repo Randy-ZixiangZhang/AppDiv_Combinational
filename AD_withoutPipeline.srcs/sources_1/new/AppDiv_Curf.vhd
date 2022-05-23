@@ -32,7 +32,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity AppDiv_Curf is
     Port(Dividend:in unsigned (15 downto 0);
         Divisor:in unsigned (15 downto 0);
-        Quotient:out unsigned (15 downto 0)
+        Quotient:out unsigned (31 downto 0)
     );
 
 
@@ -77,7 +77,7 @@ architecture Structural of AppDiv_Curf is
                P01 : in  unsigned (15 downto 0);
                P10 : in  unsigned (15 downto 0);
                Num_shift : in integer range 0 to 15;
-               Quotient : out unsigned (15 downto 0));
+               Quotient : out unsigned (31 downto 0));
     end component;
     
     signal ExpA: integer range 0 to 15;

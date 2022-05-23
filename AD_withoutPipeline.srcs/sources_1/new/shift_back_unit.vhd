@@ -39,7 +39,7 @@ entity shift_back_unit is
            P01 : in  unsigned (15 downto 0);
            P10 : in  unsigned (15 downto 0);
            Num_shift : in integer range 0 to 15;
-           Quotient : out unsigned (15 downto 0));
+           Quotient : out unsigned (31 downto 0));
 end shift_back_unit;
 
 architecture Behavioral of shift_back_unit is
@@ -54,18 +54,31 @@ begin
 	   variable tempMUL_2: unsigned(31 downto 0);
 	   variable temp1: unsigned(15 downto 0);
 	   variable temp2: unsigned(15 downto 0);
-	   variable temp3: unsigned(15 downto 0);
-       variable app_M: unsigned (15 downto 0);
+	   variable temp3: unsigned(31 downto 0);
+       variable app_M: unsigned (31 downto 0);
+       variable long_p00: unsigned (31 downto 0) := (others => '0');
         
         begin
         
+        
+        
         tempMUL_1 := p10*Mantissa_Dividend;
         tempMUL_2 := p01*Mantissa_Divisor;
-        temp1 := tempMUL_1(27 downto 24) & tempMUL_1(23 downto 12);
-        temp2 := tempMUL_2(27 downto 12);
         
-        app_M := temp2  + p00 - temp1;
-        Quotient <= shift_right(app_M,Num_shift);
+        long_p00(27 downto 12) := p00;
+        
+        temp3 := long_p00 + tempMUL_1 - tempMUL_2;
+        
+        --temp1 := tempMUL_1(27 downto 24) & tempMUL_1(23 downto 12);
+        --temp2 := tempMUL_2(27 downto 12);
+        
+        --app_M := temp2  + p00 - temp1;
+        --long_p00 := (others => '0');
+        --
+        app_M := temp3;
+        
+        -- Potentially a lot of accurary lost due to this shift back
+        Quotient <= shift_right(app_M, 4 + Num_shift);
     
     end process;
 

@@ -51,19 +51,19 @@ ARCHITECTURE behavior OF tb_AppDiv_Curf_Automated IS
    signal N_b : unsigned(15 downto 0) ;
 
  	--Outputs
-   signal Q: unsigned (15 downto 0);
+   signal Q: unsigned (31 downto 0);
    -- No clocks detected in port list. Replace <clock> below with 
    -- appropriate port name 
  
    --constant <clock>_period : time := 10 ns;
  
-   constant C_FILE_NAME :string  := "/home/randy/Documents/Forschungspraxis/Curve_Fitting_Method/Matlab_Fitting_Codes/DataIn.txt";
+   constant C_FILE_NAME :string  := "/home/randy/Documents/AD_withoutPipeline/MATLAB_src/DataIn.txt";
    --constant C_FILE_NAME_OUT :string := "DataOut";
    constant C_CLK :time := 10 ns;
    constant C_DATA1_W   :integer := 16;
-   constant C_DATA1_INT_W : integer:= 12;
+   --constant C_DATA1_INT_W : integer:= 12;
    constant C_DATA2_W   :integer := 16;
-   constant C_DATA2_INT_W : integer:= 12;
+   --constant C_DATA2_INT_W : integer:= 12;
    
    signal data1         :integer range 0 to 50000;
    signal data2         :integer range 0 to 50000;
@@ -120,7 +120,7 @@ BEGIN
         file_open(fptr,C_FILE_NAME,READ_MODE);
         
         --only works with absolute path
-        file_open(fstatus,w_file,"/home/randy/Documents/Forschungspraxis/Curve_Fitting_Method/Matlab_Fitting_Codes/DataOut.txt",WRITE_MODE);
+        file_open(fstatus,w_file,"//home/randy/Documents/AD_withoutPipeline/MATLAB_src/DataOut.txt",WRITE_MODE);
         
         while (not endfile(fptr)) loop
             wait until clk = '1';
@@ -135,6 +135,9 @@ BEGIN
             
             N_a      <= shift_left(to_unsigned(var_data1,C_DATA1_W),4);
             N_b      <= shift_left(to_unsigned(var_data2,C_DATA1_W),4); -- 1st May change so front 12 integer, 4 last zeros(fractional)
+
+--            N_a      <= shift_left(to_unsigned(var_data1,C_DATA1_W),8);
+--            N_b      <= shift_left(to_unsigned(var_data2,C_DATA1_W),8); 
             
 --            write(trace_line,var_data1);
 --            write(trace_line,var_data2);
@@ -150,7 +153,7 @@ BEGIN
             wait for 5ns;
             --if to_integer(Q) = 'X' then
                --write(trace_line,to_integer(Q));
-               write(trace_line,to_integer(Q));
+               write(trace_line,std_logic_vector(Q));
                --x := to_ufixed(Q);
                --write(trace_line,to_real(x));
             --else
